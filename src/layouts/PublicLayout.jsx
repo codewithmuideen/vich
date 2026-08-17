@@ -4,6 +4,7 @@ import Footer from '../components/Footer'
 import CookieBanner from '../components/CookieBanner'
 import WhatsAppButton from '../components/WhatsAppButton'
 import ScrollToTop from '../components/ScrollToTop'
+import ScrollToTopButton from '../components/ScrollToTopButton'
 
 export default function PublicLayout() {
   const { pathname } = useLocation()
@@ -27,6 +28,7 @@ export default function PublicLayout() {
       <Footer />
       <CookieBanner />
       <WhatsAppButton floating />
+      <ScrollToTopButton />
     </div>
   )
 }

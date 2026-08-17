@@ -89,7 +89,6 @@ export default function BookAppointment() {
     }
   }
 
-  const canGoStep2 = !!service
   const canGoStep3 = !!date
   const canGoStep4 = !!time
   const canGoStep5 = details.name.trim() && details.email.trim() && details.phone.trim()

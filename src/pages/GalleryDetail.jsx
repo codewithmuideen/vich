@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import SEO, { buildBreadcrumbJsonLd } from '../components/SEO'
 import Breadcrumbs from '../components/Breadcrumbs'
 import EditorialImage from '../components/EditorialImage'

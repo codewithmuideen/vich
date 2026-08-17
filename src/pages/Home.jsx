@@ -323,6 +323,21 @@ export default function Home() {
         </div>
       </section>
 
+      {/* FAQ TEASER — full FAQ list lives on its own page, not embedded here */}
+      <section className="border-t border-forest/10 bg-white py-20">
+        <div className="container-edit flex flex-col items-center gap-6 text-center">
+          <SectionHeading
+            eyebrow="Got Questions?"
+            title="Booking, pricing and preparation — answered"
+            description="From how payment works to what to do before your appointment, our FAQ page covers the essentials."
+            align="center"
+          />
+          <Button to="/faq" variant="outline" size="md">
+            View FAQs
+          </Button>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="border-t border-forest/10 bg-forest">
         <div className="container-edit flex flex-col items-center gap-6 py-24 text-center">
