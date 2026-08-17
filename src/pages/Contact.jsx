@@ -48,11 +48,18 @@ export default function Contact() {
           <div className="flex flex-col gap-10">
             <div className="flex flex-col gap-6">
               <ContactRow icon={PiPhoneLight} label="Phone" value={settings.phone} href={settings.phone ? `tel:${settings.phone}` : null} />
-              <ContactRow icon={PiEnvelopeSimpleLight} label="Email" value={settings.email} href={settings.email ? `mailto:${settings.email}` : null} />
+              <ContactRow icon={PiEnvelopeSimpleLight} label="General Enquiries" value={settings.email} href={settings.email ? `mailto:${settings.email}` : null} />
+              <ContactRow icon={PiEnvelopeSimpleLight} label="Bookings & Enquiries" value={settings.enquiries_email} href={settings.enquiries_email ? `mailto:${settings.enquiries_email}` : null} />
               <ContactRow
                 icon={PiMapPinLight}
                 label="Address"
-                value={settings.address_line1 ? `${settings.address_line1}${settings.city ? `, ${settings.city}` : ''} ${settings.postcode || ''}` : ''}
+                value={
+                  settings.address_line1
+                    ? `${settings.address_line1}${settings.city ? `, ${settings.city}` : ''} ${settings.postcode || ''}`
+                    : settings.city
+                      ? `${settings.city}, ${settings.country || 'United Kingdom'} — full address to be confirmed`
+                      : ''
+                }
               />
               {settings.opening_hours?.some((h) => !h.closed) && (
                 <div className="flex items-start gap-4">

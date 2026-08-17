@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin
 Disallow: /api
 
-Sitemap: https://www.unitedvich.co.uk/sitemap.xml
+Sitemap: https://www.vichsaloon.co.uk/sitemap.xml

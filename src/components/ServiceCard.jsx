@@ -17,6 +17,7 @@ export default function ServiceCard({ service, index = 0 }) {
         <div className="transition-transform duration-700 ease-out group-hover:scale-[1.04]">
           <EditorialImage
             src={service.image}
+            hoverSrc={service.hoverImage}
             alt={service.name}
             label={service.category}
             aspect="aspect-[3/4]"

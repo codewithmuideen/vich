@@ -43,7 +43,7 @@ export default function Footer() {
       <div className="container-edit grid grid-cols-1 gap-12 py-16 sm:grid-cols-2 lg:grid-cols-5">
         <div className="flex flex-col gap-4 lg:col-span-2">
           <Link to="/" className="flex items-center gap-3">
-            <img src="/brand/logo.png" alt="United Vich Enterprise" className="h-12 w-12 object-contain" />
+            <img src="/brand/logo.png" alt="United Vich Enterprise" className="h-16 w-16 object-contain" />
             <span className="font-display text-xl text-ivory">United Vich Enterprise</span>
           </Link>
           <p className="max-w-sm font-body text-sm leading-relaxed text-ivory/65">
@@ -105,6 +105,11 @@ export default function Footer() {
                   {settings.address_line1}
                   {settings.city ? `, ${settings.city}` : ''} {settings.postcode}
                 </span>
+              </li>
+            ) : settings.city ? (
+              <li className="flex items-start gap-2">
+                <PiMapPinLight className="mt-0.5 shrink-0 text-gold-light" />
+                <span>{settings.city}, {settings.country || 'United Kingdom'}</span>
               </li>
             ) : (
               <li className="italic text-ivory/40">Address to be confirmed</li>

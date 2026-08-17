@@ -49,7 +49,7 @@ export default function About() {
               added here as they are confirmed by the business.
             </p>
           </motion.div>
-          <EditorialImage alt="United Vich Enterprise salon interior" label="Salon photography coming soon" aspect="aspect-[4/5]" />
+          <EditorialImage src="/images/salon/interior-2.jpg" alt="Elegant hair salon interior" aspect="aspect-[4/5]" />
         </div>
       </section>
 

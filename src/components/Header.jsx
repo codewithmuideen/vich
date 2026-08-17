@@ -45,11 +45,11 @@ export default function Header() {
         transparent ? 'bg-transparent' : 'bg-ivory/95 backdrop-blur-sm shadow-[0_1px_0_0_rgba(0,56,34,0.08)]'
       }`}
     >
-      <div className="container-edit flex h-20 items-center justify-between">
+      <div className="container-edit flex h-28 items-center justify-between">
         <NavLink to="/" className="flex items-center gap-3" aria-label="United Vich Enterprise home">
-          <img src="/brand/logo.png" alt="United Vich Enterprise" className="h-11 w-11 object-contain" />
+          <img src="/brand/logo.png" alt="United Vich Enterprise" className="h-20 w-20 object-contain sm:h-24 sm:w-24" />
           <span
-            className={`hidden font-display text-lg tracking-wide sm:block ${
+            className={`hidden font-display text-xl tracking-wide sm:block ${
               transparent ? 'text-ivory' : 'text-forest'
             }`}
           >

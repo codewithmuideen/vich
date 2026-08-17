@@ -6,7 +6,7 @@ export default function Loader({ fullScreen = false, label = 'Loading' }) {
       <motion.img
         src="/brand/logo.png"
         alt="United Vich Enterprise"
-        className="h-14 w-14 object-contain"
+        className="h-20 w-20 object-contain"
         animate={{ opacity: [0.4, 1, 0.4] }}
         transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
       />

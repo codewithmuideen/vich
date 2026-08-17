@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { PiArrowDownLight } from 'react-icons/pi'
 import Button from './Button'
-import VideoBackground from './VideoBackground'
+import ImageBackground from './ImageBackground'
 
 const container = {
   hidden: {},
@@ -16,7 +16,7 @@ const item = {
 export default function Hero() {
   return (
     <section className="relative flex min-h-[92vh] w-full items-center overflow-hidden bg-forest">
-      <VideoBackground src="/videos/bg1.mp4" />
+      <ImageBackground src="/images/salon/interior-1.jpg" alt="" eager />
 
       <motion.div
         variants={container}

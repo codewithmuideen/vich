@@ -8,9 +8,10 @@ import ServiceCard from '../components/ServiceCard'
 import GalleryCard from '../components/GalleryCard'
 import ReviewCard from '../components/ReviewCard'
 import DemoNotice from '../components/DemoNotice'
-import VideoBackground from '../components/VideoBackground'
+import ImageBackground from '../components/ImageBackground'
 import SEO, { SITE_URL } from '../components/SEO'
 import { useApiData } from '../hooks/useApiData'
+import { useSettings } from '../context/SettingsContext'
 import { getServices, getMostLoved, getReviews } from '../services/api'
 import { PLACEHOLDER_SERVICES, PLACEHOLDER_GALLERY, PLACEHOLDER_REVIEWS } from '../data/placeholders'
 
@@ -33,6 +34,7 @@ const VALUES = [
 ]
 
 export default function Home() {
+  const { settings } = useSettings()
   const servicesState = useApiData(() => getServices({ featured: 1, limit: 6 }), {
     fallback: PLACEHOLDER_SERVICES.slice(0, 6),
   })
@@ -41,17 +43,32 @@ export default function Home() {
     fallback: PLACEHOLDER_REVIEWS,
   })
 
-  const jsonLd = useMemo(
-    () => ({
+  const jsonLd = useMemo(() => {
+    const openingHoursSpecification = (settings.opening_hours || [])
+      .filter((h) => !h.closed)
+      .map((h) => ({
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: h.day,
+        opens: h.open,
+        closes: h.close,
+      }))
+
+    return {
       '@context': 'https://schema.org',
       '@type': 'HairSalon',
-      name: 'United Vich Enterprise',
+      name: settings.business_name || 'United Vich Enterprise',
       url: SITE_URL,
       image: `${SITE_URL}/brand/logo.png`,
+      email: settings.email || undefined,
       priceRange: '££',
-    }),
-    [],
-  )
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: settings.city || 'London',
+        addressCountry: 'GB',
+      },
+      ...(openingHoursSpecification.length ? { openingHoursSpecification } : {}),
+    }
+  }, [settings])
 
   return (
     <>
@@ -118,7 +135,7 @@ export default function Home() {
 
       {/* EDITORIAL BANNER */}
       <section className="relative flex min-h-[70vh] items-center overflow-hidden bg-forest">
-        <VideoBackground src="/videos/bg2.mp4" />
+        <ImageBackground src="/images/hero/portrait-1.jpg" alt="" />
         <div className="container-edit relative z-10 flex flex-col items-start gap-6 py-24">
           <SectionHeading
             eyebrow="The United Vich Experience"

@@ -10,6 +10,7 @@ import { PiFlowerLotusLight } from 'react-icons/pi'
  */
 export default function EditorialImage({
   src,
+  hoverSrc,
   alt,
   label,
   aspect = 'aspect-[4/5]',
@@ -46,8 +47,18 @@ export default function EditorialImage({
         initial={reveal ? { scale: 1.06, opacity: 0 } : false}
         animate={reveal && loaded ? { scale: 1, opacity: 1 } : false}
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        className="h-full w-full object-cover"
+        className={`h-full w-full object-cover ${hoverSrc ? 'transition-opacity duration-700 group-hover:opacity-0' : ''}`}
       />
+      {hoverSrc && (
+        <img
+          src={hoverSrc}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 h-full w-full scale-105 object-cover opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+        />
+      )}
     </div>
   )
 }

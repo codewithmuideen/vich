@@ -14,7 +14,7 @@ export default function GalleryCard({ item, index = 0, span = 'aspect-[4/5]' }) 
     >
       <Link to={`/gallery/${item.slug}`} className="block">
         <div className="transition-transform duration-700 ease-out group-hover:scale-[1.05]">
-          <EditorialImage src={item.image} alt={item.title} label={item.category} aspect={span} />
+          <EditorialImage src={item.image} hoverSrc={item.hoverImage} alt={item.title} label={item.category} aspect={span} />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-dark/75 via-dark/0 to-dark/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
       </Link>

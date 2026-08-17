@@ -34,7 +34,7 @@ export default function AdminLogin() {
       <SEO title="Admin Login" description="United Vich Enterprise admin login." path="/admin/login" noIndex />
       <div className="w-full max-w-sm border border-ivory/10 bg-ivory p-10">
         <div className="mb-8 flex flex-col items-center gap-3 text-center">
-          <img src="/brand/logo.png" alt="United Vich Enterprise" className="h-14 w-14 object-contain" />
+          <img src="/brand/logo.png" alt="United Vich Enterprise" className="h-20 w-20 object-contain" />
           <h1 className="font-display text-2xl text-forest">Admin Login</h1>
         </div>
 

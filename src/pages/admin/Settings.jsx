@@ -13,7 +13,8 @@ const SECTIONS = [
       ['business_name', 'Business Name'],
       ['phone', 'Phone Number'],
       ['whatsapp_number', 'WhatsApp Number (with country code)'],
-      ['email', 'Email Address'],
+      ['email', 'General Enquiries Email'],
+      ['enquiries_email', 'Bookings & Enquiries Email'],
     ],
   },
   {

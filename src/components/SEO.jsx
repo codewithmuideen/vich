@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useSettings } from '../context/SettingsContext'
 
-const SITE_URL = 'https://www.unitedvich.co.uk'
+const SITE_URL = 'https://www.vichsaloon.co.uk'
 
 function setMeta(attr, key, content) {
   if (!content) return

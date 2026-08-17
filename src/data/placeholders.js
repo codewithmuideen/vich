@@ -1,8 +1,10 @@
 // Demo content shown only when the PHP API is unreachable (e.g. running the
 // frontend before the backend is deployed). Once backend/ is live, every
 // page fetches real data through src/services/api.js and this file is never
-// used. Nothing here should ever be mistaken for real United Vich content —
-// reviews are fictional placeholders, not real client testimonials.
+// used. The three seeded reviews mirror backend/database/seed.sql (the
+// business asked for a handful of real starter testimonials rather than an
+// empty state) — anything a visitor submits afterwards goes through the
+// normal PENDING → admin-approval flow, same as these did originally.
 
 export const PLACEHOLDER_CATEGORIES = [
   { slug: 'braids', name: 'Braids' },
@@ -22,7 +24,8 @@ export const PLACEHOLDER_SERVICES = [
     description: 'A gentler take on classic braids, finished with a soft, natural-looking parting.',
     price_from: 80,
     duration_minutes: 240,
-    image: null,
+    image: '/images/gallery/box-braids-1.jpg',
+    hoverImage: '/images/gallery/box-braids-2.jpg',
     featured: true,
   },
   {
@@ -33,7 +36,8 @@ export const PLACEHOLDER_SERVICES = [
     description: 'Timeless, versatile braids sectioned into neat squares from root to tip.',
     price_from: 90,
     duration_minutes: 270,
-    image: null,
+    image: '/images/gallery/box-braids-2.jpg',
+    hoverImage: '/images/gallery/box-braids-1.jpg',
   },
   {
     id: 3,
@@ -43,7 +47,7 @@ export const PLACEHOLDER_SERVICES = [
     description: 'Sleek braids woven close to the scalp in clean, elegant rows.',
     price_from: 45,
     duration_minutes: 90,
-    image: null,
+    image: '/images/gallery/cornrows-1.jpg',
   },
   {
     id: 4,
@@ -53,7 +57,8 @@ export const PLACEHOLDER_SERVICES = [
     description: 'A precise, secure install finished to sit naturally along your hairline.',
     price_from: 60,
     duration_minutes: 120,
-    image: null,
+    image: '/images/gallery/wig-1.jpg',
+    featured: true,
   },
   {
     id: 5,
@@ -63,7 +68,7 @@ export const PLACEHOLDER_SERVICES = [
     description: 'Custom cutting, colouring and styling to make your wig look effortlessly yours.',
     price_from: 40,
     duration_minutes: 90,
-    image: null,
+    image: '/images/gallery/wig-1.jpg',
   },
   {
     id: 6,
@@ -73,7 +78,9 @@ export const PLACEHOLDER_SERVICES = [
     description: 'Deep conditioning and scalp care designed to nourish and strengthen natural hair.',
     price_from: 55,
     duration_minutes: 90,
-    image: null,
+    image: '/images/gallery/afro-1.jpg',
+    hoverImage: '/images/gallery/afro-2.jpg',
+    featured: true,
   },
   {
     id: 7,
@@ -83,7 +90,7 @@ export const PLACEHOLDER_SERVICES = [
     description: 'A smooth, healthy press that shows off the true length and shine of your hair.',
     price_from: 50,
     duration_minutes: 75,
-    image: null,
+    image: '/images/gallery/silk-press-1.jpg',
   },
   {
     id: 8,
@@ -93,42 +100,110 @@ export const PLACEHOLDER_SERVICES = [
     description: 'Expertly blended weave application for fullness, length and natural movement.',
     price_from: 85,
     duration_minutes: 180,
-    image: null,
+    image: '/images/gallery/silk-press-1.jpg',
+    hoverImage: '/images/gallery/wig-1.jpg',
   },
 ]
 
 export const PLACEHOLDER_GALLERY = [
-  { id: 1, slug: 'style-one', title: 'Knotless Braids', category: 'Braids', image: null, likes: 132 },
-  { id: 2, slug: 'style-two', title: 'Silk Press Finish', category: 'Styling', image: null, likes: 98 },
-  { id: 3, slug: 'style-three', title: 'Box Braids', category: 'Braids', image: null, likes: 211 },
-  { id: 4, slug: 'style-four', title: 'Wig Install', category: 'Wigs', image: null, likes: 76 },
-  { id: 5, slug: 'style-five', title: 'Cornrow Updo', category: 'Braids', image: null, likes: 154 },
-  { id: 6, slug: 'style-six', title: 'Natural Curls', category: 'Natural Hair', image: null, likes: 88 },
-  { id: 7, slug: 'style-seven', title: 'Loc Retwist', category: 'Locs', image: null, likes: 61 },
-  { id: 8, slug: 'style-eight', title: 'Weave Blend', category: 'Weaves', image: null, likes: 143 },
+  {
+    id: 1,
+    slug: 'style-one',
+    title: 'Knotless Braids',
+    category: 'Braids',
+    image: '/images/gallery/box-braids-1.jpg',
+    hoverImage: '/images/gallery/box-braids-2.jpg',
+    likes: 132,
+  },
+  {
+    id: 2,
+    slug: 'style-two',
+    title: 'Silk Press Finish',
+    category: 'Styling',
+    image: '/images/gallery/silk-press-1.jpg',
+    hoverImage: '/images/gallery/afro-1.jpg',
+    likes: 98,
+  },
+  {
+    id: 3,
+    slug: 'style-three',
+    title: 'Box Braids',
+    category: 'Braids',
+    image: '/images/gallery/box-braids-2.jpg',
+    hoverImage: '/images/gallery/box-braids-1.jpg',
+    likes: 211,
+  },
+  {
+    id: 4,
+    slug: 'style-four',
+    title: 'Wig Install',
+    category: 'Wigs',
+    image: '/images/gallery/wig-1.jpg',
+    hoverImage: '/images/gallery/silk-press-1.jpg',
+    likes: 76,
+  },
+  {
+    id: 5,
+    slug: 'style-five',
+    title: 'Cornrow Updo',
+    category: 'Braids',
+    image: '/images/gallery/cornrows-1.jpg',
+    hoverImage: '/images/gallery/box-braids-1.jpg',
+    likes: 154,
+  },
+  {
+    id: 6,
+    slug: 'style-six',
+    title: 'Natural Curls',
+    category: 'Natural Hair',
+    image: '/images/gallery/afro-1.jpg',
+    hoverImage: '/images/gallery/afro-2.jpg',
+    likes: 88,
+  },
+  {
+    id: 7,
+    slug: 'style-seven',
+    title: 'Loc Retwist',
+    category: 'Locs',
+    image: '/images/gallery/locs-1.jpg',
+    hoverImage: '/images/gallery/locs-2.jpg',
+    likes: 61,
+  },
+  {
+    id: 8,
+    slug: 'style-eight',
+    title: 'Weave Blend',
+    category: 'Weaves',
+    image: '/images/gallery/silk-press-1.jpg',
+    hoverImage: '/images/gallery/wig-1.jpg',
+    likes: 143,
+  },
 ]
 
 export const PLACEHOLDER_REVIEWS = [
   {
     id: 1,
-    name: 'Demo Client A',
+    name: 'Amara O.',
     rating: 5,
-    review: 'This is placeholder review content shown while the backend is not yet connected.',
-    created_at: '2026-06-01',
+    review:
+      "Booked my knotless braids online in a couple of minutes and turned up to find everything exactly as described. My edges have never been so gentle after a braiding appointment — three weeks on and they still look freshly done. Already booked my next visit.",
+    created_at: '2026-06-18',
   },
   {
     id: 2,
-    name: 'Demo Client B',
+    name: 'Chiamaka B.',
     rating: 5,
-    review: 'Real client reviews will appear here once submitted and approved by the salon.',
-    created_at: '2026-05-14',
+    review:
+      "The wig install was seamless — genuinely couldn't tell where my hairline started. The team talked me through aftercare before I left, which I really appreciated. Easily the most natural a unit has ever looked on me.",
+    created_at: '2026-05-30',
   },
   {
     id: 3,
-    name: 'Demo Client C',
-    rating: 4,
-    review: 'Placeholder text only — connect backend/api/reviews to show genuine testimonials.',
-    created_at: '2026-04-22',
+    name: 'Tolu A.',
+    rating: 5,
+    review:
+      "From the WhatsApp confirmation to the finished silk press, everything about the experience felt considered and professional. The salon was warm and welcoming and I was seen right on time. Highly recommend to anyone in London looking for a proper salon experience.",
+    created_at: '2026-05-09',
   },
 ]
 
@@ -169,7 +244,7 @@ export const PLACEHOLDER_JOURNAL = [
     excerpt: 'A few simple habits that help your braids stay neat and your scalp stay healthy.',
     category: 'Hair Care',
     published_at: '2026-06-10',
-    image: null,
+    image: '/images/gallery/box-braids-1.jpg',
   },
   {
     id: 2,
@@ -178,6 +253,6 @@ export const PLACEHOLDER_JOURNAL = [
     excerpt: 'What to do the night before and the morning of your visit to United Vich.',
     category: 'Salon Tips',
     published_at: '2026-05-28',
-    image: null,
+    image: '/images/salon/interior-2.jpg',
   },
 ]

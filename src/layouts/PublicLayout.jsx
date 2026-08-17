@@ -21,7 +21,7 @@ export default function PublicLayout() {
       <Header />
       {/* Header is fixed so it can float transparently over the homepage
           hero; every other page needs top padding to clear it. */}
-      <main id="main-content" className={`flex-1 ${isHome ? '' : 'pt-20'}`}>
+      <main id="main-content" className={`flex-1 ${isHome ? '' : 'pt-28'}`}>
         <Outlet />
       </main>
       <Footer />
