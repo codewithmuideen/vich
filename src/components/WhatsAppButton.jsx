@@ -15,7 +15,7 @@ export default function WhatsAppButton({ message, className = '', floating = fal
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat with United Vich Enterprise on WhatsApp"
-        className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-forest text-ivory shadow-lg shadow-forest/30 transition-transform duration-300 hover:scale-105 print:hidden"
+        className="fixed bottom-24 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-forest text-ivory shadow-lg shadow-forest/30 transition-transform duration-300 hover:scale-105 sm:bottom-6 print:hidden"
       >
         <PiWhatsappLogoLight className="text-2xl" aria-hidden="true" />
       </a>

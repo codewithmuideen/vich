@@ -1,6 +1,18 @@
 import { useMemo } from 'react'
 import { motion } from 'framer-motion'
-import { PiHeartLight, PiSparkleLight, PiShieldCheckLight } from 'react-icons/pi'
+import {
+  PiHeartLight,
+  PiSparkleLight,
+  PiShieldCheckLight,
+  PiMagnifyingGlassLight,
+  PiCalendarCheckLight,
+  PiScissorsLight,
+  PiSmileyLight,
+  PiDeviceMobileLight,
+  PiWhatsappLogoLight,
+  PiCertificateLight,
+  PiDropLight,
+} from 'react-icons/pi'
 import Hero from '../components/Hero'
 import SectionHeading from '../components/SectionHeading'
 import Button from '../components/Button'
@@ -30,6 +42,52 @@ const VALUES = [
     icon: PiShieldCheckLight,
     title: 'Reliable',
     description: 'Clear pricing, honest timing, and appointments that start when they say they will.',
+  },
+]
+
+const PROCESS_STEPS = [
+  {
+    icon: PiMagnifyingGlassLight,
+    title: 'Browse & Choose',
+    description: 'Explore our services and gallery to find the style that feels like you.',
+  },
+  {
+    icon: PiCalendarCheckLight,
+    title: 'Book Online',
+    description: 'Pick a date and time that suits you — confirmed in minutes, no phone calls needed.',
+  },
+  {
+    icon: PiScissorsLight,
+    title: 'Get Styled',
+    description: 'Sit back and relax while we bring your chosen look to life with care and precision.',
+  },
+  {
+    icon: PiSmileyLight,
+    title: 'Leave Loving It',
+    description: 'Walk out with a style that turns heads, plus aftercare guidance to help it last.',
+  },
+]
+
+const FEATURES = [
+  {
+    icon: PiDeviceMobileLight,
+    title: 'Effortless Online Booking',
+    description: 'Choose your service, date and time in a few taps — available around the clock.',
+  },
+  {
+    icon: PiWhatsappLogoLight,
+    title: 'WhatsApp Support',
+    description: 'Real, direct communication before and after your booking — no waiting on hold.',
+  },
+  {
+    icon: PiCertificateLight,
+    title: 'Skilled, Caring Stylists',
+    description: 'Every style is shaped by hands that take genuine pride in the finished result.',
+  },
+  {
+    icon: PiDropLight,
+    title: 'Quality Products',
+    description: 'We use products chosen to protect your hair and scalp, not just the finished look.',
   },
 ]
 
@@ -133,6 +191,38 @@ export default function Home() {
         </div>
       </section>
 
+      {/* HOW IT WORKS */}
+      <section className="bg-white py-24">
+        <div className="container-edit flex flex-col gap-14">
+          <SectionHeading
+            eyebrow="How We Work"
+            title="Booking your next style, simplified"
+            description="Four simple steps between you and your next great hair day."
+            align="center"
+          />
+          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+            {PROCESS_STEPS.map((step, index) => (
+              <motion.div
+                key={step.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.7, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="relative flex flex-col items-center gap-4 px-4 text-center"
+              >
+                <span className="font-display text-sm text-gold/50">{String(index + 1).padStart(2, '0')}</span>
+                <step.icon className="text-4xl text-gold" aria-hidden="true" />
+                <h3 className="font-display text-xl text-forest">{step.title}</h3>
+                <p className="max-w-xs font-body text-sm leading-relaxed text-dark/60">{step.description}</p>
+                {index !== PROCESS_STEPS.length - 1 && (
+                  <span className="absolute right-[-1.25rem] top-14 hidden h-px w-8 bg-gold/25 lg:block" aria-hidden="true" />
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* EDITORIAL BANNER */}
       <section className="relative flex min-h-[70vh] items-center overflow-hidden bg-forest">
         <ImageBackground src="/images/hero/portrait-1.jpg" alt="" />
@@ -146,6 +236,33 @@ export default function Home() {
           <Button to="/about" variant="outlineLight" size="lg">
             Discover Our Story
           </Button>
+        </div>
+      </section>
+
+      {/* WHY CHOOSE US */}
+      <section className="py-24">
+        <div className="container-edit flex flex-col gap-14">
+          <SectionHeading
+            eyebrow="Why Choose United Vich"
+            title="Everything you need, nothing you don't"
+            align="center"
+          />
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {FEATURES.map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.7, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                className="flex flex-col gap-4 border border-forest/10 bg-white p-8"
+              >
+                <feature.icon className="text-3xl text-gold" aria-hidden="true" />
+                <h3 className="font-display text-lg text-forest">{feature.title}</h3>
+                <p className="font-body text-sm leading-relaxed text-dark/60">{feature.description}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { PiInstagramLogoLight, PiFacebookLogoLight, PiTiktokLogoLight, PiMapPinLight, PiPhoneLight, PiEnvelopeSimpleLight } from 'react-icons/pi'
+import { PiInstagramLogoLight, PiFacebookLogoLight, PiTiktokLogoLight, PiXLogoLight, PiMapPinLight, PiPhoneLight, PiEnvelopeSimpleLight } from 'react-icons/pi'
 import { useSettings } from '../context/SettingsContext'
 import Button from './Button'
 
@@ -64,6 +64,11 @@ export default function Footer() {
             {settings.tiktok_url && (
               <a href={settings.tiktok_url} target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="flex h-10 w-10 items-center justify-center border border-ivory/20 transition-colors hover:border-gold-light hover:text-gold-light">
                 <PiTiktokLogoLight className="text-lg" />
+              </a>
+            )}
+            {settings.x_url && (
+              <a href={settings.x_url} target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)" className="flex h-10 w-10 items-center justify-center border border-ivory/20 transition-colors hover:border-gold-light hover:text-gold-light">
+                <PiXLogoLight className="text-lg" />
               </a>
             )}
           </div>

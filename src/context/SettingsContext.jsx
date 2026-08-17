@@ -10,8 +10,8 @@ import { getSettings } from '../services/api'
 const FALLBACK_SETTINGS = {
   business_name: 'United Vich Enterprise',
   tagline: 'Care · Empathy · Reliable',
-  phone: '',
-  whatsapp_number: '',
+  phone: '+44 7778 971232',
+  whatsapp_number: '+44 7778 971232',
   email: 'info@vichsaloon.co.uk',
   enquiries_email: 'enquiries@vichsaloon.co.uk',
   address_line1: '',
@@ -19,9 +19,10 @@ const FALLBACK_SETTINGS = {
   city: 'London',
   postcode: '',
   country: 'United Kingdom',
-  google_maps_url: '',
+  google_maps_url: 'https://www.google.com/maps?q=London,United+Kingdom&output=embed',
   instagram_url: '',
   facebook_url: '',
+  x_url: '',
   tiktok_url: '',
   google_business_url: '',
   opening_hours: [
@@ -30,8 +31,8 @@ const FALLBACK_SETTINGS = {
     { day: 'Wednesday', open: '09:00', close: '18:00', closed: false },
     { day: 'Thursday', open: '09:00', close: '18:00', closed: false },
     { day: 'Friday', open: '09:00', close: '18:00', closed: false },
-    { day: 'Saturday', open: null, close: null, closed: true },
-    { day: 'Sunday', open: null, close: null, closed: true },
+    { day: 'Saturday', open: '12:00', close: '16:00', closed: false },
+    { day: 'Sunday', open: '12:00', close: '16:00', closed: false },
   ],
   seo_default_title: 'United Vich Enterprise | Premium Women’s Hair & Beauty Salon',
   seo_default_description:

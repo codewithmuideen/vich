@@ -32,6 +32,7 @@ const SECTIONS = [
     fields: [
       ['instagram_url', 'Instagram URL'],
       ['facebook_url', 'Facebook URL'],
+      ['x_url', 'X (Twitter) URL'],
       ['tiktok_url', 'TikTok URL'],
       ['google_business_url', 'Google Business Profile URL'],
     ],

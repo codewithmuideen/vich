@@ -57,7 +57,7 @@ export default function Contact() {
                   settings.address_line1
                     ? `${settings.address_line1}${settings.city ? `, ${settings.city}` : ''} ${settings.postcode || ''}`
                     : settings.city
-                      ? `${settings.city}, ${settings.country || 'United Kingdom'} — full address to be confirmed`
+                      ? `${settings.city}, ${settings.country || 'United Kingdom'}`
                       : ''
                 }
               />

@@ -4,6 +4,7 @@ import SEO from '../components/SEO'
 import SectionHeading from '../components/SectionHeading'
 import Breadcrumbs from '../components/Breadcrumbs'
 import EditorialImage from '../components/EditorialImage'
+import Signpost from '../components/Signpost'
 import Button from '../components/Button'
 
 const PILLARS = [
@@ -49,7 +50,32 @@ export default function About() {
               added here as they are confirmed by the business.
             </p>
           </motion.div>
-          <EditorialImage src="/images/salon/interior-2.jpg" alt="Elegant hair salon interior" aspect="aspect-[4/5]" />
+          <Signpost />
+        </div>
+      </section>
+
+      <section className="border-t border-forest/10 bg-white py-20">
+        <div className="container-edit grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
+          <EditorialImage src="/images/gallery/natural-hair-2.jpg" alt="Natural hair styling at United Vich" aspect="aspect-[4/5]" className="order-last lg:order-first" />
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col gap-5"
+          >
+            <span className="font-body text-xs font-semibold uppercase tracking-[0.28em] text-gold">Our Approach</span>
+            <h2 className="font-display text-4xl text-forest">Considered, not rushed</h2>
+            <p className="font-body text-base leading-relaxed text-dark/70">
+              Every appointment starts with a proper consultation — your hair&rsquo;s condition, your goals, and
+              how much time you actually have. We&rsquo;d rather talk you out of a style that won&rsquo;t suit
+              your hair than rush you into one.
+            </p>
+            <p className="font-body text-base leading-relaxed text-dark/70">
+              That same care carries through to aftercare guidance, so your style looks as good in week three as
+              it did on day one.
+            </p>
+          </motion.div>
         </div>
       </section>
 
