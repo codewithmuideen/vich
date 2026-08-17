@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Static fallback sitemap for core pages.
+  Once deployed, replace this file's route with backend/api/sitemap.php,
+  which generates entries for services, gallery items and journal posts
+  directly from the database (see backend/api/sitemap.php).
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.unitedvich.co.uk/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://www.unitedvich.co.uk/services</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.unitedvich.co.uk/gallery</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.unitedvich.co.uk/about</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.unitedvich.co.uk/reviews</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.unitedvich.co.uk/contact</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.unitedvich.co.uk/book-appointment</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.unitedvich.co.uk/faq</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.unitedvich.co.uk/journal</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.unitedvich.co.uk/privacy-policy</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
+  <url><loc>https://www.unitedvich.co.uk/cookie-policy</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
+  <url><loc>https://www.unitedvich.co.uk/terms</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
+</urlset>

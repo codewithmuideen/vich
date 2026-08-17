@@ -1,0 +1,33 @@
+{
+  "name": "United Vich Enterprise",
+  "short_name": "United Vich",
+  "description": "Premium women's hair and beauty salon. Browse styles and book your appointment.",
+  "start_url": "/?source=pwa",
+  "id": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F8F7F3",
+  "theme_color": "#003822",
+  "orientation": "portrait-primary",
+  "lang": "en-GB",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
