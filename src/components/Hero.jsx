@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { PiArrowDownLight, PiStarFour } from 'react-icons/pi'
 import Button from './Button'
-import ImageBackground from './ImageBackground'
+import VideoBackground from './VideoBackground'
 
 const container = {
   hidden: {},
@@ -18,7 +18,7 @@ const SERVICE_TAGS = ['Braids', 'Wigs', 'Natural Hair', 'Locs', 'Styling']
 export default function Hero() {
   return (
     <section className="relative flex min-h-[100svh] w-full items-center overflow-hidden bg-forest">
-      <ImageBackground src="/images/gallery/braids-13.jpg" alt="" />
+      <VideoBackground src="/videos/bg2.mp4" />
 
       <motion.div
         variants={container}
