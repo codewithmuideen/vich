@@ -5,12 +5,13 @@
   RewriteEngine On
   RewriteBase /
 
-  # Optional: serve the DB-driven sitemap from the PHP backend instead of the
-  # static fallback in this folder. Uncomment once backend/api is deployed
-  # at /api on this domain:
-  # RewriteRule ^sitemap\.xml$ /api/sitemap/generate.php [L]
+  # Optional: redirect to the DB-driven sitemap served by the sitemap-xml
+  # Supabase Edge Function instead of the static fallback in this folder
+  # (shared cPanel hosting usually lacks mod_proxy, so this redirects rather
+  # than proxies). Uncomment once the function is deployed:
+  # RewriteRule ^sitemap\.xml$ https://YOUR_PROJECT.functions.supabase.co/sitemap-xml [R=302,L]
 
-  # Let real files and the /api directory (reverse-proxied or subfolder-deployed backend) pass through
+  # Let real files pass through untouched
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]

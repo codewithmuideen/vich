@@ -6,6 +6,8 @@ import Breadcrumbs from '../components/Breadcrumbs'
 import ServiceCard from '../components/ServiceCard'
 import DemoNotice from '../components/DemoNotice'
 import EmptyState from '../components/EmptyState'
+import ImageBackground from '../components/ImageBackground'
+import Button from '../components/Button'
 import { useApiData } from '../hooks/useApiData'
 import { getServices, getServiceCategories } from '../services/api'
 import { PLACEHOLDER_SERVICES, PLACEHOLDER_CATEGORIES } from '../data/placeholders'
@@ -39,7 +41,7 @@ export default function Services() {
     <>
       <SEO
         title="Hair & Beauty Services"
-        description="Browse United Vich Enterprise's full range of women's hair services — braids, wigs, natural hair, weaves and more — with transparent pricing and duration."
+        description="Browse United Vich Enterprise's full range of women's hair services, including braids, wigs, natural hair and weaves, with transparent pricing and duration."
         path="/services"
       />
 
@@ -49,7 +51,7 @@ export default function Services() {
           <SectionHeading
             eyebrow="What We Offer"
             title="Our Services"
-            description="Every service is delivered with meticulous care, from consultation to final style. Prices shown are starting prices — your consultation will confirm the exact price for your hair."
+            description="Every service is delivered with meticulous care, from consultation to final style. Prices shown are starting prices, and your consultation will confirm the exact price for your hair."
           />
         </div>
       </section>
@@ -99,6 +101,21 @@ export default function Services() {
               ))}
             </div>
           )}
+        </div>
+      </section>
+
+      <section className="relative flex min-h-[60vh] items-center overflow-hidden bg-forest">
+        <ImageBackground src="/images/gallery/braids-2.jpg" alt="" />
+        <div className="container-edit relative z-10 flex flex-col items-start gap-6 py-20">
+          <SectionHeading
+            eyebrow="Not Sure Which Style?"
+            title="Let's find your perfect fit together"
+            description="Book a consultation and we'll help you choose a style that suits your hair, your lifestyle and your budget."
+            light
+          />
+          <Button to="/book-appointment" variant="gold" size="lg">
+            Book a Consultation
+          </Button>
         </div>
       </section>
     </>

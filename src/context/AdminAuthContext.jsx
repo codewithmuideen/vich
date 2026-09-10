@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
-import { adminLogin, adminLogout, adminMe } from '../services/api'
+import { supabase } from '../services/supabaseClient'
+import { adminLogin as apiAdminLogin } from '../services/api'
 
 const AdminAuthContext = createContext(null)
 
@@ -8,34 +9,42 @@ export function AdminAuthProvider({ children }) {
   const [checking, setChecking] = useState(true)
 
   useEffect(() => {
-    const token = sessionStorage.getItem('uv_admin_token')
-    if (!token) {
+    let cancelled = false
+
+    async function hydrateFromSession(session) {
+      if (!session) {
+        if (!cancelled) {
+          setAdmin(null)
+          setChecking(false)
+        }
+        return
+      }
+      const { data } = await supabase.from('admin_profiles').select('*').eq('user_id', session.user.id).maybeSingle()
+      if (cancelled) return
+      setAdmin(data && data.status === 'active' ? { ...data, id: data.user_id, email: session.user.email } : null)
       setChecking(false)
-      return
     }
-    adminMe()
-      .then((data) => setAdmin(data))
-      .catch(() => {
-        sessionStorage.removeItem('uv_admin_token')
-        setAdmin(null)
-      })
-      .finally(() => setChecking(false))
+
+    supabase.auth.getSession().then(({ data }) => hydrateFromSession(data.session))
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => hydrateFromSession(session))
+
+    return () => {
+      cancelled = true
+      subscription.unsubscribe()
+    }
   }, [])
 
   const login = useCallback(async (email, password) => {
-    const data = await adminLogin({ email, password })
-    if (data?.token) sessionStorage.setItem('uv_admin_token', data.token)
-    setAdmin(data?.admin || null)
+    const data = await apiAdminLogin({ email, password })
+    setAdmin(data.admin)
     return data
   }, [])
 
   const logout = useCallback(async () => {
-    try {
-      await adminLogout()
-    } catch {
-      // ignore — clear local session regardless
-    }
-    sessionStorage.removeItem('uv_admin_token')
+    await supabase.auth.signOut()
     setAdmin(null)
   }, [])
 

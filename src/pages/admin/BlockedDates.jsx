@@ -35,7 +35,7 @@ export default function AdminBlockedDates() {
 
   return (
     <>
-      <PageHeader title="Blocked Dates" description="Block specific dates for holidays or closures — no appointments can be booked on these dates." />
+      <PageHeader title="Blocked Dates" description="Block specific dates for holidays or closures. No appointments can be booked on these dates." />
 
       <form onSubmit={handleAdd} className="mb-8 flex flex-wrap items-end gap-3">
         <div className="flex flex-col gap-2">

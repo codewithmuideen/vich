@@ -44,7 +44,7 @@ export default function AdminLayout() {
         }`}
       >
         <div className="flex h-20 items-center gap-3 border-b border-ivory/10 px-6">
-          <img src="/brand/logo.png" alt="United Vich Enterprise" className="h-9 w-9 object-contain" />
+          <img src="/brand/logo-light.png" alt="United Vich Enterprise" className="h-9 w-9 object-contain" />
           <span className="font-display text-lg">Admin</span>
           <button className="ml-auto lg:hidden" onClick={() => setMobileOpen(false)} aria-label="Close menu">
             <PiXLight className="text-xl" />

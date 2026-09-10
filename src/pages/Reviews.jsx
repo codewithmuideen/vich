@@ -69,7 +69,7 @@ export default function Reviews() {
 
       <section className="py-20">
         <div className="container-edit flex flex-col gap-10">
-          {reviewsState.isFallback && <DemoNotice>Preview content — real, approved client reviews will appear here.</DemoNotice>}
+          {reviewsState.isFallback && <DemoNotice>Preview content. Real, approved client reviews will appear here.</DemoNotice>}
 
           {reviewsState.loading ? (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">

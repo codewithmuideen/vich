@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { PiArrowDownLight, PiStarFour } from 'react-icons/pi'
 import Button from './Button'
-import VideoBackground from './VideoBackground'
+import ImageBackground from './ImageBackground'
 
 const container = {
   hidden: {},
@@ -18,7 +18,7 @@ const SERVICE_TAGS = ['Braids', 'Wigs', 'Natural Hair', 'Locs', 'Styling']
 export default function Hero() {
   return (
     <section className="relative flex min-h-[100svh] w-full items-center overflow-hidden bg-forest">
-      <VideoBackground src="/videos/bg2.mp4" />
+      <ImageBackground src="/images/gallery/braids-13.jpg" alt="" />
 
       <motion.div
         variants={container}
@@ -44,7 +44,7 @@ export default function Hero() {
         </motion.h1>
 
         <motion.p variants={item} className="max-w-lg font-body text-base leading-relaxed text-ivory/85 sm:text-lg">
-          From flawless knotless braids to natural hair care that actually nourishes — every appointment at
+          From flawless knotless braids to natural hair care that actually nourishes, every appointment at
           United Vich is crafted around you. Effortless online booking, exceptional results, every time.
         </motion.p>
 

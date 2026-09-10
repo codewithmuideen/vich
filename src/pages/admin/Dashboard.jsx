@@ -21,7 +21,7 @@ export default function Dashboard() {
   const { data, loading, error } = useApiData(() => adminGetDashboard(), {})
 
   if (loading) return <Loader />
-  if (error) return <ErrorMessage message="Could not load dashboard data. Confirm the PHP API is deployed and reachable." />
+  if (error) return <ErrorMessage message="Could not load dashboard data. Confirm Supabase is configured and reachable." />
 
   const stats = [
     { key: 'today', label: "Today's Appointments", value: data?.today_count ?? 0 },
@@ -60,7 +60,7 @@ export default function Dashboard() {
                   <div>
                     <p className="font-body text-sm font-semibold text-forest">{appt.customer_name}</p>
                     <p className="font-body text-xs text-dark/50">
-                      {appt.service_name} — {formatDateLong(appt.date)} at {formatTime(appt.time)}
+                      {appt.service_name} · {formatDateLong(appt.date)} at {formatTime(appt.time)}
                     </p>
                   </div>
                   <StatusBadge status={appt.status} />

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Static fallback sitemap for core pages.
-  Once deployed, replace this file's route with backend/api/sitemap/generate.php,
-  which generates entries for services, gallery items and journal posts
-  directly from the database (see the RewriteRule in this folder's .htaccess).
+  Once deployed, this route can be replaced by the sitemap-xml Supabase Edge
+  Function, which generates entries for services, gallery items and journal
+  posts directly from the database (see the RewriteRule in this folder's
+  .htaccess, and supabase/functions/sitemap-xml).
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://www.vichsaloon.co.uk/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>

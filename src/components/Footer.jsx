@@ -43,7 +43,7 @@ export default function Footer() {
       <div className="container-edit grid grid-cols-1 gap-12 py-16 sm:grid-cols-2 lg:grid-cols-5">
         <div className="flex flex-col gap-4 lg:col-span-2">
           <Link to="/" className="flex items-center gap-3">
-            <img src="/brand/logo.png" alt="United Vich Enterprise" className="h-16 w-16 object-contain" />
+            <img src="/brand/logo-light.png" alt="United Vich Enterprise" className="h-16 w-16 object-contain" />
             <span className="font-display text-xl text-ivory">United Vich Enterprise</span>
           </Link>
           <p className="max-w-sm font-body text-sm leading-relaxed text-ivory/65">

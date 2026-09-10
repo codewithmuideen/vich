@@ -19,7 +19,7 @@ export default function About() {
     <>
       <SEO
         title="About Us"
-        description="Learn about United Vich Enterprise — a premium women's hair and beauty salon built on care, empathy and reliability."
+        description="Learn about United Vich Enterprise, a premium women's hair and beauty salon built on care, empathy and reliability."
         path="/about"
       />
 
@@ -41,8 +41,8 @@ export default function About() {
           >
             <p className="font-body text-base leading-relaxed text-dark/70">
               United Vich Enterprise was founded on a simple belief: that great hair care starts with genuinely
-              caring about the person in the chair. Our name carries three words that guide everything we
-              do — Care, Empathy, Reliable — and they are more than a motto; they are how we work.
+              caring about the person in the chair. Our name carries three words that guide everything we do:
+              Care, Empathy, Reliable. They are more than a motto; they are how we work.
             </p>
             <p className="font-body text-base leading-relaxed text-dark/70">
               We are a women&rsquo;s hair and beauty salon offering braiding, natural hair care, wig
@@ -56,7 +56,7 @@ export default function About() {
 
       <section className="border-t border-forest/10 bg-white py-20">
         <div className="container-edit grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
-          <EditorialImage src="/images/gallery/natural-hair-2.jpg" alt="Natural hair styling at United Vich" aspect="aspect-[4/5]" className="order-last lg:order-first" />
+          <EditorialImage src="/images/gallery/locs-5.jpg" alt="Ombre locs styled at United Vich" aspect="aspect-[4/5]" className="order-last lg:order-first" />
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -67,8 +67,8 @@ export default function About() {
             <span className="font-body text-xs font-semibold uppercase tracking-[0.28em] text-gold">Our Approach</span>
             <h2 className="font-display text-4xl text-forest">Considered, not rushed</h2>
             <p className="font-body text-base leading-relaxed text-dark/70">
-              Every appointment starts with a proper consultation — your hair&rsquo;s condition, your goals, and
-              how much time you actually have. We&rsquo;d rather talk you out of a style that won&rsquo;t suit
+              Every appointment starts with a proper consultation covering your hair&rsquo;s condition, your goals,
+              and how much time you actually have. We&rsquo;d rather talk you out of a style that won&rsquo;t suit
               your hair than rush you into one.
             </p>
             <p className="font-body text-base leading-relaxed text-dark/70">

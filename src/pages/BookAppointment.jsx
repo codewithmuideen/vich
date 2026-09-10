@@ -154,7 +154,7 @@ export default function BookAppointment() {
                 <p className="font-body text-sm text-dark/60">
                   <PiCalendarLight className="mr-1 inline" /> {formatDateLong(date)}
                 </p>
-                {slotsState.isFallback && <DemoNotice>Preview time slots — connect the availability API for real-time slots.</DemoNotice>}
+                {slotsState.isFallback && <DemoNotice>Preview time slots. Connect the availability API for real-time slots.</DemoNotice>}
                 {slotsState.loading ? (
                   <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
                     {Array.from({ length: 8 }).map((_, i) => (
@@ -369,7 +369,7 @@ function BookingSuccess({ booking }) {
               <PiClockLight aria-hidden="true" /> Complete Payment via WhatsApp
             </p>
             <p className="font-body text-sm text-dark/60">
-              Tap below to open WhatsApp with your booking details pre-filled — just hit send.
+              Tap below to open WhatsApp with your booking details pre-filled, then just hit send.
             </p>
             <WhatsAppButton message={message} className="mx-auto" />
           </div>

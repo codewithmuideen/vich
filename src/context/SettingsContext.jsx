@@ -1,12 +1,12 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { getSettings } from '../services/api'
 
-// Fallback values shown until the backend /settings/public.php endpoint
-// responds — used mainly for local frontend development before the PHP
-// backend is deployed. These mirror the real starter values seeded in
-// backend/database/seed.sql; anything still genuinely unconfirmed (street
-// address, phone, WhatsApp number) stays blank rather than invented, and the
-// admin dashboard lets the business owner overwrite every field.
+// Fallback values shown until getSettings() (Supabase) responds — used
+// mainly for local frontend development before Supabase is configured.
+// These mirror the real starter values seeded in supabase/seed.sql;
+// anything still genuinely unconfirmed (street address, phone, WhatsApp
+// number) stays blank rather than invented, and the admin dashboard lets
+// the business owner overwrite every field.
 const FALLBACK_SETTINGS = {
   business_name: 'United Vich Enterprise',
   tagline: 'Care · Empathy · Reliable',

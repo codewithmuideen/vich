@@ -31,7 +31,7 @@ const VALUES = [
   {
     icon: PiHeartLight,
     title: 'Care',
-    description: 'Every appointment is treated as personal — your hair, your comfort, your time.',
+    description: 'Every appointment is treated as personal, with your hair, your comfort and your time in mind.',
   },
   {
     icon: PiSparkleLight,
@@ -54,7 +54,7 @@ const PROCESS_STEPS = [
   {
     icon: PiCalendarCheckLight,
     title: 'Book Online',
-    description: 'Pick a date and time that suits you — confirmed in minutes, no phone calls needed.',
+    description: 'Pick a date and time that suits you, confirmed in minutes with no phone calls needed.',
   },
   {
     icon: PiScissorsLight,
@@ -72,12 +72,12 @@ const FEATURES = [
   {
     icon: PiDeviceMobileLight,
     title: 'Effortless Online Booking',
-    description: 'Choose your service, date and time in a few taps — available around the clock.',
+    description: 'Choose your service, date and time in a few taps, available around the clock.',
   },
   {
     icon: PiWhatsappLogoLight,
     title: 'WhatsApp Support',
-    description: 'Real, direct communication before and after your booking — no waiting on hold.',
+    description: 'Real, direct communication before and after your booking, with no waiting on hold.',
   },
   {
     icon: PiCertificateLight,
@@ -225,12 +225,12 @@ export default function Home() {
 
       {/* EDITORIAL BANNER */}
       <section className="relative flex min-h-[70vh] items-center overflow-hidden bg-forest">
-        <ImageBackground src="/images/hero/portrait-1.jpg" alt="" />
+        <ImageBackground src="/images/gallery/braids-14.jpg" alt="" />
         <div className="container-edit relative z-10 flex flex-col items-start gap-6 py-24">
           <SectionHeading
             eyebrow="The United Vich Experience"
             title="A salon built around you"
-            description="From the moment you sit down, every detail — your comfort, your time, your finished look — is considered with care."
+            description="From the moment you sit down, every detail is considered with care: your comfort, your time and your finished look."
             light
           />
           <Button to="/about" variant="outlineLight" size="lg">
@@ -303,7 +303,7 @@ export default function Home() {
             align="center"
           />
 
-          {reviewsState.isFallback && <DemoNotice>Preview content — real, approved client reviews will appear here.</DemoNotice>}
+          {reviewsState.isFallback && <DemoNotice>Preview content. Real, approved client reviews will appear here.</DemoNotice>}
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
             {(reviewsState.loading ? Array.from({ length: 3 }) : reviewsState.data).map((review, index) =>
@@ -328,7 +328,7 @@ export default function Home() {
         <div className="container-edit flex flex-col items-center gap-6 text-center">
           <SectionHeading
             eyebrow="Got Questions?"
-            title="Booking, pricing and preparation — answered"
+            title="Booking, pricing and preparation, answered"
             description="From how payment works to what to do before your appointment, our FAQ page covers the essentials."
             align="center"
           />

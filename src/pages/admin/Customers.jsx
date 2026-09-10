@@ -47,7 +47,7 @@ export default function AdminCustomers() {
                   <td className="px-4 py-3">{c.email}</td>
                   <td className="px-4 py-3">{c.phone}</td>
                   <td className="px-4 py-3">{c.appointments_count}</td>
-                  <td className="px-4 py-3">{c.last_visit || '—'}</td>
+                  <td className="px-4 py-3">{c.last_visit || 'N/A'}</td>
                 </tr>
               ))}
             </tbody>

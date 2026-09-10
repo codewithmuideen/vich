@@ -47,10 +47,16 @@ export default function Header() {
     >
       <div className="container-edit flex h-28 items-center justify-between">
         <NavLink to="/" className="flex items-center gap-3" aria-label="United Vich Enterprise home">
-          <img src="/brand/logo.png" alt="United Vich Enterprise" className="h-20 w-20 object-contain sm:h-24 sm:w-24" />
+          <img
+            src={transparent ? '/brand/logo-light.png' : '/brand/logo.png'}
+            alt="United Vich Enterprise"
+            className={`h-20 w-20 object-contain sm:h-24 sm:w-24 ${
+              transparent ? 'drop-shadow-[0_2px_10px_rgba(0,0,0,0.55)]' : ''
+            }`}
+          />
           <span
             className={`hidden font-display text-xl tracking-wide sm:block ${
-              transparent ? 'text-ivory' : 'text-forest'
+              transparent ? 'text-ivory [text-shadow:0_1px_6px_rgba(0,0,0,0.55)]' : 'text-forest'
             }`}
           >
             United Vich <span className="text-gold-light">Enterprise</span>

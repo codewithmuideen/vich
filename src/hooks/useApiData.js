@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 /**
- * Fetches from the PHP API and exposes {data, loading, error, refetch}. If
+ * Fetches from Supabase and exposes {data, loading, error, refetch}. If
  * `fallback` is provided, it is used while the backend is unreachable
- * (development before deployment, or a transient outage) so the UI still
+ * (development before configuration, or a transient outage) so the UI still
  * renders — the `isFallback` flag lets pages disclose that state instead of
  * pretending it's live data.
  */

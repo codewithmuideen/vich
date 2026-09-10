@@ -34,7 +34,7 @@ export default function GalleryDetail() {
     <>
       <SEO
         title={item.title}
-        description={item.description || `${item.title} — hairstyle gallery, United Vich Enterprise.`}
+        description={item.description || `${item.title}: hairstyle gallery, United Vich Enterprise.`}
         path={`/gallery/${slug}`}
         image={item.image}
         type="article"

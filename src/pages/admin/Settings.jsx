@@ -86,7 +86,7 @@ export default function AdminSettings() {
 
   return (
     <>
-      <PageHeader title="Settings" description="Business details that power the whole site — header, footer, SEO tags and booking flow." />
+      <PageHeader title="Settings" description="Business details that power the whole site, including the header, footer, SEO tags and booking flow." />
 
       <form onSubmit={handleSave} className="flex max-w-3xl flex-col gap-10">
         {SECTIONS.map((section) => (

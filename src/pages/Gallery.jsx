@@ -4,6 +4,7 @@ import SEO from '../components/SEO'
 import SectionHeading from '../components/SectionHeading'
 import Breadcrumbs from '../components/Breadcrumbs'
 import GalleryCard from '../components/GalleryCard'
+import VideoGalleryCard from '../components/VideoGalleryCard'
 import DemoNotice from '../components/DemoNotice'
 import EmptyState from '../components/EmptyState'
 import { useApiData } from '../hooks/useApiData'
@@ -12,6 +13,14 @@ import { PLACEHOLDER_GALLERY, PLACEHOLDER_CATEGORIES } from '../data/placeholder
 
 const CATEGORY_TABS = [{ slug: 'all', name: 'All' }, ...PLACEHOLDER_CATEGORIES]
 const SPANS = ['aspect-[4/5]', 'aspect-square', 'aspect-[3/4]', 'aspect-[4/5]']
+
+const CRAFT_VIDEOS = [
+  { title: 'Braiding, Up Close', src: '/videos/salon-braiding-close-up.mp4', poster: '/images/gallery/poster-salon-braiding-close-up.jpg' },
+  { title: 'Parting & Sectioning', src: '/videos/salon-braid-parting.mp4', poster: '/images/gallery/poster-salon-braid-parting.jpg' },
+  { title: 'A Locs Session', src: '/videos/salon-locs-session.mp4', poster: '/images/gallery/poster-salon-locs-session.jpg' },
+  { title: 'Long Braids, Finished', src: '/videos/salon-braids-portrait.mp4', poster: '/images/gallery/poster-salon-braids-portrait.jpg' },
+  { title: 'Twist Detail', src: '/videos/salon-twist-detail-portrait.mp4', poster: '/images/gallery/poster-salon-twist-detail-portrait.jpg' },
+]
 
 export default function Gallery() {
   const [params, setParams] = useSearchParams()
@@ -38,7 +47,7 @@ export default function Gallery() {
     <>
       <SEO
         title="Hairstyle Gallery"
-        description="Explore real hairstyle inspiration from United Vich Enterprise — braids, wigs, natural hair, weaves and more."
+        description="Explore real hairstyle inspiration from United Vich Enterprise, including braids, wigs, natural hair and weaves."
         path="/gallery"
       />
 
@@ -88,6 +97,21 @@ export default function Gallery() {
               ))}
             </div>
           )}
+        </div>
+      </section>
+
+      <section className="border-t border-forest/10 bg-white py-16">
+        <div className="container-edit flex flex-col gap-10">
+          <SectionHeading
+            eyebrow="Watch the Craft"
+            title="See the styles come together"
+            description="A few real clips from behind the chair. Tap any clip to watch."
+          />
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+            {CRAFT_VIDEOS.map((video) => (
+              <VideoGalleryCard key={video.src} {...video} />
+            ))}
+          </div>
         </div>
       </section>
     </>

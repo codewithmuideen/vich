@@ -32,7 +32,7 @@ export default function Contact() {
     <>
       <SEO
         title="Contact Us"
-        description="Get in touch with United Vich Enterprise — phone, WhatsApp, email, or send us a message directly."
+        description="Get in touch with United Vich Enterprise by phone, WhatsApp or email, or send us a message directly."
         path="/contact"
       />
 

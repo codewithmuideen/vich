@@ -1,20 +1,14 @@
-import { useEffect, useState } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { useState } from 'react'
+import { motion } from 'framer-motion'
 
 /**
- * Full-bleed background photograph used behind hero/editorial sections, with
- * a slow Ken Burns drift and a gradient overlay for text legibility.
+ * Full-bleed background photo used behind hero/editorial sections — the
+ * still-image counterpart to VideoBackground. No autoplay, no video weight,
+ * just a real photo with the same dark gradient overlay treatment so text
+ * stays legible on top of it.
  */
-export default function ImageBackground({ src, alt = '', overlay = true, eager = false, className = '' }) {
+export default function ImageBackground({ src, alt = '', overlay = true, className = '' }) {
   const [loaded, setLoaded] = useState(false)
-  const prefersReducedMotion = useReducedMotion()
-
-  useEffect(() => {
-    const img = new Image()
-    img.src = src
-    img.onload = () => setLoaded(true)
-    if (img.complete) setLoaded(true)
-  }, [src])
 
   return (
     <div className={`absolute inset-0 overflow-hidden bg-forest ${className}`}>
@@ -26,29 +20,16 @@ export default function ImageBackground({ src, alt = '', overlay = true, eager =
       <motion.img
         src={src}
         alt={alt}
-        loading={eager ? 'eager' : 'lazy'}
-        fetchPriority={eager ? 'high' : 'auto'}
+        loading="eager"
         decoding="async"
-        initial={{ opacity: 0, scale: 1.08 }}
-        animate={
-          loaded
-            ? prefersReducedMotion
-              ? { opacity: 1, scale: 1 }
-              : { opacity: 1, scale: 1.08 }
-            : { opacity: 0 }
-        }
-        transition={
-          prefersReducedMotion
-            ? { duration: 1 }
-            : { opacity: { duration: 1 }, scale: { duration: 18, ease: 'linear' } }
-        }
+        onLoad={() => setLoaded(true)}
+        initial={{ opacity: 0, scale: 1.05 }}
+        animate={loaded ? { opacity: 1, scale: 1 } : false}
+        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
         className="h-full w-full object-cover"
       />
       {overlay && (
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-forest-dark/85 via-forest-dark/40 to-forest-dark/55"
-          aria-hidden="true"
-        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/55" aria-hidden="true" />
       )}
     </div>
   )

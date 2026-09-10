@@ -25,7 +25,7 @@ export default function EditorialImage({
       <div
         className={`relative overflow-hidden border border-forest/15 bg-gradient-to-br from-forest/[0.06] via-ivory to-gold/10 ${aspect} ${className}`}
         role="img"
-        aria-label={alt || 'Photography placeholder — awaiting salon imagery'}
+        aria-label={alt || 'Photography placeholder, awaiting salon imagery'}
       >
         <div className="absolute inset-4 border border-gold-light/40" />
         <div className="flex h-full w-full flex-col items-center justify-center gap-3 px-6 text-center">

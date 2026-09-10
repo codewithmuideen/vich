@@ -192,10 +192,6 @@ export default function AdminServices() {
             </label>
           </div>
 
-          <p className="border border-dashed border-forest/20 bg-forest/5 px-3 py-2 font-body text-xs text-dark/50">
-            Image upload connects to backend/api/admin/services/upload.php once the PHP backend is deployed.
-          </p>
-
           {saveError && <p className="font-body text-sm text-red-700">{saveError}</p>}
 
           <Button type="submit" variant="primary" size="lg" disabled={saving} className="w-fit">

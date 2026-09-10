@@ -44,9 +44,8 @@ export default function AdminGallery() {
     setSaving(true)
     setSaveError('')
     try {
-      // Image upload is sent as multipart/form-data to
-      // backend/api/admin/gallery/save.php, which validates MIME type,
-      // extension and dimensions server-side before storing the file.
+      // Image files are uploaded straight to the Supabase Storage "media"
+      // bucket (see uploadImage() in services/api.js) before the row is saved.
       await adminSaveGalleryItem(form)
       setModalOpen(false)
       refetch()
