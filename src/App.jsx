@@ -17,6 +17,7 @@ const About = lazy(() => import('./pages/About'))
 const Reviews = lazy(() => import('./pages/Reviews'))
 const Contact = lazy(() => import('./pages/Contact'))
 const BookAppointment = lazy(() => import('./pages/BookAppointment'))
+const ManageBooking = lazy(() => import('./pages/ManageBooking'))
 const FAQ = lazy(() => import('./pages/FAQ'))
 const Journal = lazy(() => import('./pages/Journal'))
 const JournalDetail = lazy(() => import('./pages/JournalDetail'))
@@ -54,6 +55,7 @@ function AnimatedRoutes() {
           <Route path="/reviews" element={<Wrap><Reviews /></Wrap>} />
           <Route path="/contact" element={<Wrap><Contact /></Wrap>} />
           <Route path="/book-appointment" element={<Wrap><BookAppointment /></Wrap>} />
+          <Route path="/manage-booking" element={<Wrap><ManageBooking /></Wrap>} />
           <Route path="/faq" element={<Wrap><FAQ /></Wrap>} />
           <Route path="/journal" element={<Wrap><Journal /></Wrap>} />
           <Route path="/journal/:slug" element={<Wrap><JournalDetail /></Wrap>} />

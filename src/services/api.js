@@ -226,19 +226,29 @@ export async function submitReview(payload) {
 
 // ---------- Public: Booking ----------
 
-export async function getAvailability({ service, date }) {
-  if (!service || !date) return { slots: [] }
-  const svc = unwrap(await supabase.from('services').select('duration_minutes').eq('id', service).maybeSingle())
-  if (!svc) throw new ApiError('Selected service is not available.', 404)
+// `durationMinutes` lets a custom style request (no real service_id) check
+// availability against its own chosen duration instead of a services-table
+// lookup, which would have nothing to find.
+export async function getAvailability({ service, durationMinutes, date }) {
+  if (!date || (!service && !durationMinutes)) return { slots: [] }
+  let duration = durationMinutes
+  if (!duration) {
+    const svc = unwrap(await supabase.from('services').select('duration_minutes').eq('id', service).maybeSingle())
+    if (!svc) throw new ApiError('Selected service is not available.', 404)
+    duration = svc.duration_minutes
+  }
 
-  const rows = unwrap(await supabase.rpc('get_availability_slots', { p_date: date, p_duration_minutes: svc.duration_minutes }))
+  const rows = unwrap(await supabase.rpc('get_availability_slots', { p_date: date, p_duration_minutes: duration }))
   return { slots: (rows || []).map((s) => ({ time: s.slot_time.slice(0, 5), available: s.available })) }
 }
 
-export async function getMonthAvailability({ service, year, month }) {
-  if (!service) return { closedDates: [] }
-  const svc = unwrap(await supabase.from('services').select('duration_minutes').eq('id', service).maybeSingle())
-  const duration = svc?.duration_minutes || 60
+export async function getMonthAvailability({ service, durationMinutes, year, month }) {
+  if (!service && !durationMinutes) return { closedDates: [] }
+  let duration = durationMinutes
+  if (!duration) {
+    const svc = unwrap(await supabase.from('services').select('duration_minutes').eq('id', service).maybeSingle())
+    duration = svc?.duration_minutes || 60
+  }
 
   const rows = unwrap(
     await supabase.rpc('get_month_availability', { p_year: year, p_month: month, p_duration_minutes: duration }),
@@ -249,18 +259,21 @@ export async function getMonthAvailability({ service, year, month }) {
 export async function createBooking(payload) {
   const booking = unwrap(
     await supabase.rpc('create_booking', {
-      p_service_id: payload.service_id,
+      p_service_id: payload.service_id || null,
       p_date: payload.date,
       p_time: payload.time,
       p_name: payload.name,
       p_email: payload.email,
       p_phone: payload.phone,
       p_notes: payload.notes || null,
+      p_custom_service_name: payload.custom_service_name || null,
+      p_custom_price: payload.custom_price || null,
+      p_duration_minutes: payload.duration_minutes || null,
     }),
   )
 
-  // Booking succeeds either way — email delivery is best-effort and never
-  // blocks the confirmation screen from showing.
+  // Booking succeeds either way — email/push delivery is best-effort and
+  // never blocks the confirmation screen from showing.
   supabase.functions.invoke('send-booking-emails', { body: booking }).catch(() => {})
 
   return booking
@@ -270,6 +283,46 @@ export async function getBooking(reference) {
   const data = unwrap(await supabase.rpc('get_booking', { p_reference: reference }))
   if (!data) throw new ApiError('Booking not found.', 404)
   return data
+}
+
+// find_booking() requires both reference AND the email on the booking —
+// stricter than get_booking(), and what powers self-service cancel/reschedule.
+export async function findBooking({ reference, email }) {
+  const data = unwrap(await supabase.rpc('find_booking', { p_reference: reference, p_email: email }))
+  if (!data) throw new ApiError('We could not find a booking with that reference and email.', 404)
+  return data
+}
+
+export async function cancelBooking({ reference, email, reason }) {
+  const result = unwrap(await supabase.rpc('cancel_booking', { p_reference: reference, p_email: email, p_reason: reason || null }))
+  supabase.functions.invoke('notify-booking-change', { body: { type: 'cancelled', ...result } }).catch(() => {})
+  return result
+}
+
+export async function rescheduleBooking({ reference, email, date, time }) {
+  const result = unwrap(
+    await supabase.rpc('reschedule_booking', { p_reference: reference, p_email: email, p_new_date: date, p_new_time: time }),
+  )
+  supabase.functions.invoke('notify-booking-change', { body: { type: 'rescheduled', ...result } }).catch(() => {})
+  return result
+}
+
+// ---------- Public: Push notifications ----------
+
+export async function subscribeCustomerPush({ reference, email, subscription }) {
+  unwrap(
+    await supabase.rpc('save_customer_push_subscription', {
+      p_reference: reference,
+      p_email: email,
+      p_endpoint: subscription.endpoint,
+      p_p256dh: subscription.p256dh,
+      p_auth: subscription.auth,
+    }),
+  )
+}
+
+export async function unsubscribePush(endpoint) {
+  unwrap(await supabase.rpc('remove_push_subscription', { p_endpoint: endpoint }))
 }
 
 // ---------- Public: Contact / Settings / Journal ----------
@@ -330,8 +383,13 @@ export async function getFaqs() {
 
 // ---------- Admin: Auth ----------
 
+// Throws (rather than returning null) when the lookup itself failed — a
+// permissions/network problem is a different, more actionable error than
+// "this account genuinely has no admin_profiles row," and callers should
+// not confuse the two.
 async function fetchAdminProfile(userId, email) {
-  const { data } = await supabase.from('admin_profiles').select('*').eq('user_id', userId).maybeSingle()
+  const { data, error } = await supabase.from('admin_profiles').select('*').eq('user_id', userId).maybeSingle()
+  if (error) throw new ApiError('Could not verify admin access. Please try again in a moment.', 500, error)
   if (!data || data.status !== 'active') return null
   return { ...data, id: data.user_id, email }
 }
@@ -340,7 +398,13 @@ export async function adminLogin({ email, password }) {
   const { data, error } = await supabase.auth.signInWithPassword({ email, password })
   if (error) throw new ApiError('Invalid email or password.', 401, error)
 
-  const admin = await fetchAdminProfile(data.user.id, data.user.email)
+  let admin
+  try {
+    admin = await fetchAdminProfile(data.user.id, data.user.email)
+  } catch (err) {
+    await supabase.auth.signOut()
+    throw err
+  }
   if (!admin) {
     await supabase.auth.signOut()
     throw new ApiError('This account is not authorized for admin access.', 403)
@@ -364,17 +428,8 @@ export async function adminMe() {
 
 // ---------- Admin: Appointments ----------
 
-export async function adminGetAppointments(filters = {}) {
-  let query = supabase
-    .from('appointments')
-    .select('*, customer:customers(name, email, phone), service:services(name)')
-    .order('appointment_date', { ascending: false })
-    .order('appointment_time', { ascending: false })
-
-  if (filters.status) query = query.eq('status', filters.status)
-  if (filters.date) query = query.eq('appointment_date', filters.date)
-
-  const rows = unwrap(await query).map((a) => ({
+function mapAdminAppointment(a) {
+  return {
     id: a.id,
     reference: a.reference,
     date: a.appointment_date,
@@ -384,11 +439,28 @@ export async function adminGetAppointments(filters = {}) {
     status: a.status,
     notes: a.notes,
     admin_notes: a.admin_notes,
+    is_custom: !a.service_id,
+    custom_price: a.custom_price != null ? Number(a.custom_price) : null,
     customer_name: a.customer?.name,
     customer_email: a.customer?.email,
     customer_phone: a.customer?.phone,
-    service_name: a.service?.name,
-  }))
+    service_name: a.service?.name || a.custom_service_name,
+  }
+}
+
+const ADMIN_APPOINTMENT_SELECT = '*, customer:customers(name, email, phone), service:services(name)'
+
+export async function adminGetAppointments(filters = {}) {
+  let query = supabase
+    .from('appointments')
+    .select(ADMIN_APPOINTMENT_SELECT)
+    .order('appointment_date', { ascending: false })
+    .order('appointment_time', { ascending: false })
+
+  if (filters.status) query = query.eq('status', filters.status)
+  if (filters.date) query = query.eq('appointment_date', filters.date)
+
+  const rows = unwrap(await query).map(mapAdminAppointment)
 
   if (!filters.search) return rows
   const needle = filters.search.toLowerCase()
@@ -401,7 +473,105 @@ export async function adminGetAppointments(filters = {}) {
 }
 
 export async function adminUpdateAppointment(id, payload) {
-  return unwrap(await supabase.from('appointments').update(payload).eq('id', id).select().single())
+  const row = unwrap(await supabase.from('appointments').update(payload).eq('id', id).select(ADMIN_APPOINTMENT_SELECT).single())
+  const mapped = mapAdminAppointment(row)
+
+  // A status change to CANCELLED from the admin side notifies the customer
+  // the same way a self-service cancellation does.
+  if (payload.status === 'CANCELLED') {
+    supabase.functions
+      .invoke('notify-booking-change', {
+        body: {
+          type: 'cancelled',
+          reference: mapped.reference,
+          service_name: mapped.service_name,
+          date: mapped.date,
+          time: mapped.time,
+          customer_name: mapped.customer_name,
+          customer_email: mapped.customer_email,
+        },
+      })
+      .catch(() => {})
+  }
+
+  return mapped
+}
+
+// Admin reschedule bypasses the customer-facing RPC (which requires the
+// customer's own email as proof of ownership) since the admin already has
+// direct update rights via RLS — the database's EXCLUDE constraint still
+// makes an overlapping slot impossible to save.
+export async function adminRescheduleAppointment(id, { date, time }) {
+  const before = unwrap(await supabase.from('appointments').select(ADMIN_APPOINTMENT_SELECT).eq('id', id).single())
+  const beforeMapped = mapAdminAppointment(before)
+
+  let after
+  try {
+    after = unwrap(
+      await supabase
+        .from('appointments')
+        .update({ appointment_date: date, appointment_time: time })
+        .eq('id', id)
+        .select(ADMIN_APPOINTMENT_SELECT)
+        .single(),
+    )
+  } catch (err) {
+    if (err.payload?.code === '23P01') {
+      throw new ApiError('This slot is no longer available. Please choose another time.', 409, err.payload)
+    }
+    throw err
+  }
+
+  const afterMapped = mapAdminAppointment(after)
+
+  supabase.functions
+    .invoke('notify-booking-change', {
+      body: {
+        type: 'rescheduled',
+        reference: afterMapped.reference,
+        service_name: afterMapped.service_name,
+        old_date: beforeMapped.date,
+        old_time: beforeMapped.time,
+        date: afterMapped.date,
+        time: afterMapped.time,
+        customer_name: afterMapped.customer_name,
+        customer_email: afterMapped.customer_email,
+      },
+    })
+    .catch(() => {})
+
+  return afterMapped
+}
+
+// ---------- Admin: Push notifications ----------
+// Admin rows go straight to the table (RLS restricts them to their own
+// admin_user_id) rather than through an RPC, since the caller is already a
+// signed-in, authorized admin — no extra ownership proof needed.
+
+export async function subscribeAdminPush(subscription) {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+  if (!session) throw new ApiError('Not signed in.', 401)
+
+  unwrap(
+    await supabase.from('push_subscriptions').upsert(
+      {
+        subscriber_type: 'admin',
+        admin_user_id: session.user.id,
+        endpoint: subscription.endpoint,
+        p256dh: subscription.p256dh,
+        auth: subscription.auth,
+      },
+      { onConflict: 'endpoint' },
+    ),
+  )
+}
+
+export async function adminHasPushSubscription(endpoint) {
+  if (!endpoint) return false
+  const { data } = await supabase.from('push_subscriptions').select('id').eq('endpoint', endpoint).maybeSingle()
+  return !!data
 }
 
 // ---------- Admin: Services ----------

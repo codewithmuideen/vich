@@ -17,6 +17,7 @@ import {
   PiSignOutLight,
 } from 'react-icons/pi'
 import { useAdminAuth } from '../../context/AdminAuthContext'
+import PushToggle from '../../components/admin/PushToggle'
 
 const NAV = [
   { to: '/admin', label: 'Dashboard', icon: PiSquaresFourLight, end: true },
@@ -84,6 +85,7 @@ export default function AdminLayout() {
           </button>
           <span className="hidden font-display text-lg text-forest lg:block">United Vich Admin</span>
           <div className="flex items-center gap-4">
+            <PushToggle />
             <span className="font-body text-sm text-dark/60">{admin?.name || admin?.email}</span>
             <button
               onClick={logout}

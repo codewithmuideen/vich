@@ -19,7 +19,11 @@ export function AdminAuthProvider({ children }) {
         }
         return
       }
-      const { data } = await supabase.from('admin_profiles').select('*').eq('user_id', session.user.id).maybeSingle()
+      const { data, error } = await supabase.from('admin_profiles').select('*').eq('user_id', session.user.id).maybeSingle()
+      if (error) {
+        // eslint-disable-next-line no-console
+        console.error('[AdminAuthContext] Could not verify admin status:', error)
+      }
       if (cancelled) return
       setAdmin(data && data.status === 'active' ? { ...data, id: data.user_id, email: session.user.email } : null)
       setChecking(false)

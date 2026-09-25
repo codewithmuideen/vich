@@ -16,6 +16,7 @@ const QUICK_LINKS = [
   { label: 'Reviews', to: '/reviews' },
   { label: 'Journal', to: '/journal' },
   { label: 'FAQ', to: '/faq' },
+  { label: 'Manage Booking', to: '/manage-booking' },
 ]
 
 const LEGAL_LINKS = [

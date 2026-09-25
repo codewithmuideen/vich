@@ -63,3 +63,40 @@ self.addEventListener('fetch', (event) => {
     )
   }
 })
+
+// Booking updates (new booking for admin, reminders, cancellations) reach
+// people this way even when the site isn't open — that's the whole point
+// of push, as opposed to an in-page notification.
+self.addEventListener('push', (event) => {
+  let payload = { title: 'United Vich Enterprise', body: '' }
+  try {
+    if (event.data) payload = event.data.json()
+  } catch {
+    if (event.data) payload = { title: 'United Vich Enterprise', body: event.data.text() }
+  }
+
+  const { title = 'United Vich Enterprise', body = '', url = '/', tag } = payload
+
+  event.waitUntil(
+    self.registration.showNotification(title, {
+      body,
+      icon: '/icons/icon-192.png',
+      badge: '/icons/icon-192.png',
+      tag,
+      data: { url },
+    }),
+  )
+})
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close()
+  const url = event.notification.data?.url || '/'
+
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientsArr) => {
+      const existing = clientsArr.find((c) => new URL(c.url).pathname === url)
+      if (existing) return existing.focus()
+      return self.clients.openWindow(url)
+    }),
+  )
+})

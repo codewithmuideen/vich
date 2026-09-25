@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { PiCheckCircleLight, PiClockLight, PiCalendarLight, PiCopyLight } from 'react-icons/pi'
+import { PiCheckCircleLight, PiClockLight, PiCalendarLight, PiCopyLight, PiSparkleLight, PiBellLight } from 'react-icons/pi'
 import SEO from '../components/SEO'
 import SectionHeading from '../components/SectionHeading'
 import Breadcrumbs from '../components/Breadcrumbs'
@@ -11,13 +11,23 @@ import BookingCalendar from '../components/BookingCalendar'
 import DemoNotice from '../components/DemoNotice'
 import WhatsAppButton from '../components/WhatsAppButton'
 import { useApiData } from '../hooks/useApiData'
-import { getServices, getAvailability, createBooking } from '../services/api'
+import { getServices, getAvailability, createBooking, subscribeCustomerPush } from '../services/api'
 import { formatPrice, formatDuration, formatDateLong, formatTime } from '../lib/format'
 import { bookingPaymentMessage } from '../lib/whatsapp'
 import { PLACEHOLDER_SERVICES } from '../data/placeholders'
+import { isPushSupported, getOrCreatePushSubscription, subscriptionToKeys } from '../lib/push'
 
 const STEPS = ['Service', 'Date', 'Time', 'Details', 'Review']
 const FALLBACK_SLOTS = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00']
+const CUSTOM_DURATIONS = [
+  { minutes: 60, label: '1 hour' },
+  { minutes: 90, label: '1 hour 30 mins' },
+  { minutes: 120, label: '2 hours' },
+  { minutes: 180, label: '3 hours' },
+  { minutes: 240, label: '4 hours' },
+  { minutes: 300, label: '5 hours' },
+  { minutes: 360, label: '6 hours or more' },
+]
 
 function toKey(date) {
   return date.toISOString().slice(0, 10)
@@ -33,6 +43,9 @@ export default function BookAppointment() {
   const [submitStatus, setSubmitStatus] = useState('idle')
   const [submitError, setSubmitError] = useState('')
   const [booking, setBooking] = useState(null)
+  const [showCustomForm, setShowCustomForm] = useState(false)
+  const [customStyle, setCustomStyle] = useState({ name: '', price: '', duration: 120 })
+  const [customError, setCustomError] = useState('')
 
   const servicesState = useApiData(() => getServices(), { fallback: PLACEHOLDER_SERVICES })
 
@@ -49,15 +62,47 @@ export default function BookAppointment() {
   }, [servicesState.data])
 
   const slotsState = useApiData(
-    () => (date && service ? getAvailability({ service: service.id, date: toKey(date) }) : Promise.resolve(null)),
-    { fallback: date ? { slots: FALLBACK_SLOTS.map((t) => ({ time: t, available: true })) } : null, deps: [date?.toDateString(), service?.id] },
+    () =>
+      date && service
+        ? getAvailability({ service: service.id, durationMinutes: service.duration_minutes, date: toKey(date) })
+        : Promise.resolve(null),
+    { fallback: date ? { slots: FALLBACK_SLOTS.map((t) => ({ time: t, available: true })) } : null, deps: [date?.toDateString(), service?.id, service?.duration_minutes] },
   )
 
   function selectService(s) {
     setService(s)
     setDate(null)
     setTime(null)
+    setShowCustomForm(false)
     params.set('service', s.slug)
+    setParams(params, { replace: true })
+    setStep(2)
+  }
+
+  function selectCustomStyle() {
+    const name = customStyle.name.trim()
+    const price = Number(customStyle.price)
+    if (!name) {
+      setCustomError('Please tell us what style you would like.')
+      return
+    }
+    if (!price || price <= 0) {
+      setCustomError('Please enter the price you would like to offer.')
+      return
+    }
+    setCustomError('')
+    setService({
+      id: null,
+      slug: null,
+      name,
+      category: 'Custom Request',
+      price_from: price,
+      duration_minutes: Number(customStyle.duration),
+      isCustom: true,
+    })
+    setDate(null)
+    setTime(null)
+    params.delete('service')
     setParams(params, { replace: true })
     setStep(2)
   }
@@ -72,13 +117,18 @@ export default function BookAppointment() {
     setSubmitError('')
     try {
       const payload = {
-        service_id: service.id,
+        service_id: service.isCustom ? null : service.id,
         date: toKey(date),
         time,
         name: details.name,
         email: details.email,
         phone: details.phone,
         notes: details.notes,
+        ...(service.isCustom && {
+          custom_service_name: service.name,
+          custom_price: service.price_from,
+          duration_minutes: service.duration_minutes,
+        }),
       }
       const result = await createBooking(payload)
       setBooking(result)
@@ -136,14 +186,81 @@ export default function BookAppointment() {
                       </span>
                     </button>
                   ))}
+
+                  <button
+                    type="button"
+                    onClick={() => setShowCustomForm((v) => !v)}
+                    className={`flex flex-col items-start gap-2 border border-dashed p-5 text-left transition-colors ${
+                      showCustomForm || service?.isCustom ? 'border-gold bg-gold/5' : 'border-forest/25 hover:border-gold'
+                    }`}
+                  >
+                    <PiSparkleLight className="text-2xl text-gold" aria-hidden="true" />
+                    <span className="font-display text-xl text-forest">Don&rsquo;t See Your Style?</span>
+                    <span className="font-body text-xs text-dark/50">Tell us what you&rsquo;d like and your budget</span>
+                  </button>
                 </div>
+
+                <AnimatePresence>
+                  {showCustomForm && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                      className="overflow-hidden"
+                    >
+                      <div className="mt-2 flex flex-col gap-5 border border-gold/30 bg-gold/5 p-6">
+                        <p className="font-body text-sm text-dark/60">
+                          Describe the style you&rsquo;d like and what you&rsquo;re hoping to pay. We&rsquo;ll confirm the exact price when we
+                          confirm your appointment.
+                        </p>
+                        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                          <Field
+                            label="Style Name"
+                            required
+                            value={customStyle.name}
+                            onChange={(v) => setCustomStyle((c) => ({ ...c, name: v }))}
+                          />
+                          <Field
+                            label="Your Offer (£)"
+                            type="number"
+                            required
+                            value={customStyle.price}
+                            onChange={(v) => setCustomStyle((c) => ({ ...c, price: v }))}
+                          />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          <label htmlFor="custom-duration" className="font-body text-xs font-semibold uppercase tracking-[0.14em] text-forest">
+                            Estimated Duration
+                          </label>
+                          <select
+                            id="custom-duration"
+                            value={customStyle.duration}
+                            onChange={(e) => setCustomStyle((c) => ({ ...c, duration: e.target.value }))}
+                            className="border border-forest/20 bg-white px-4 py-3 font-body text-sm outline-none focus:border-gold"
+                          >
+                            {CUSTOM_DURATIONS.map((d) => (
+                              <option key={d.minutes} value={d.minutes}>
+                                {d.label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        {customError && <p className="font-body text-sm text-red-700">{customError}</p>}
+                        <Button variant="primary" size="lg" onClick={selectCustomStyle} className="self-start">
+                          Continue with This Style
+                        </Button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </StepWrap>
             )}
 
             {step === 2 && (
               <StepWrap key="step2">
                 <SelectedServiceBanner service={service} onChange={() => goToStep(1)} />
-                <BookingCalendar serviceId={service?.id} value={date} onChange={setDate} />
+                <BookingCalendar serviceId={service?.id} durationMinutes={service?.duration_minutes} value={date} onChange={setDate} />
                 <StepNav onBack={() => goToStep(1)} onNext={() => goToStep(3)} nextDisabled={!canGoStep3} />
               </StepWrap>
             )}
@@ -216,7 +333,10 @@ export default function BookAppointment() {
                   <SummaryRow label="Date" value={formatDateLong(date)} />
                   <SummaryRow label="Time" value={formatTime(time)} />
                   <SummaryRow label="Duration" value={formatDuration(service?.duration_minutes)} />
-                  <SummaryRow label="Price" value={`From ${formatPrice(service?.price_from ?? service?.price)}`} />
+                  <SummaryRow
+                    label={service?.isCustom ? 'Your Offer' : 'Price'}
+                    value={service?.isCustom ? formatPrice(service?.price_from) : `From ${formatPrice(service?.price_from ?? service?.price)}`}
+                  />
                   <SummaryRow label="Name" value={details.name} />
                   <SummaryRow label="Email" value={details.email} />
                   <SummaryRow label="Phone" value={details.phone} />
@@ -263,7 +383,9 @@ function SelectedServiceBanner({ service, onChange }) {
   return (
     <div className="flex items-center justify-between border border-forest/10 bg-forest/5 px-5 py-4">
       <div>
-        <p className="font-body text-xs uppercase tracking-[0.14em] text-dark/40">Selected Service</p>
+        <p className="font-body text-xs uppercase tracking-[0.14em] text-dark/40">
+          {service.isCustom ? 'Custom Style Request' : 'Selected Service'}
+        </p>
         <p className="font-display text-lg text-forest">{service.name}</p>
       </div>
       <button type="button" onClick={onChange} className="font-body text-xs font-semibold uppercase tracking-[0.14em] text-gold hover:text-gold-light">
@@ -296,7 +418,10 @@ function SummaryRow({ label, value }) {
 }
 
 function Field({ label, type = 'text', required, value, onChange }) {
-  const id = label.toLowerCase().replace(/\s+/g, '-')
+  const id = label
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
   return (
     <div className="flex flex-col gap-2">
       <label htmlFor={id} className="font-body text-xs font-semibold uppercase tracking-[0.14em] text-forest">
@@ -316,6 +441,8 @@ function Field({ label, type = 'text', required, value, onChange }) {
 
 function BookingSuccess({ booking }) {
   const [copied, setCopied] = useState(false)
+  const [pushStatus, setPushStatus] = useState('idle') // idle | requesting | enabled | error
+  const [pushError, setPushError] = useState('')
   const message = useMemo(
     () =>
       bookingPaymentMessage({
@@ -331,6 +458,21 @@ function BookingSuccess({ booking }) {
     navigator.clipboard?.writeText(booking.reference)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  async function enablePush() {
+    setPushStatus('requesting')
+    setPushError('')
+    try {
+      const subscription = await getOrCreatePushSubscription()
+      await subscribeCustomerPush({ reference: booking.reference, email: booking.customer_email, subscription: subscriptionToKeys(subscription) })
+      setPushStatus('enabled')
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('[enablePush]', err)
+      setPushError(err.message || 'Something went wrong.')
+      setPushStatus('error')
+    }
   }
 
   return (
@@ -373,6 +515,31 @@ function BookingSuccess({ booking }) {
             </p>
             <WhatsAppButton message={message} className="mx-auto" />
           </div>
+
+          {isPushSupported() && pushStatus !== 'enabled' && (
+            <div className="flex w-full flex-col items-center gap-3 border border-forest/10 bg-white p-6">
+              <PiBellLight className="text-2xl text-gold" aria-hidden="true" />
+              <p className="font-body text-sm text-dark/60">
+                Get a notification the moment we confirm your appointment, plus a reminder the day before, even if this site isn&rsquo;t open.
+              </p>
+              <Button variant="outline" size="md" onClick={enablePush} disabled={pushStatus === 'requesting'}>
+                {pushStatus === 'requesting' ? 'Enabling…' : 'Enable Notifications'}
+              </Button>
+              {pushStatus === 'error' && (
+                <p className="font-body text-xs text-red-700">Could not enable notifications ({pushError}). You can still track your booking below.</p>
+              )}
+            </div>
+          )}
+          {pushStatus === 'enabled' && (
+            <p className="font-body text-sm text-gold">You&rsquo;ll be notified about this booking on this device.</p>
+          )}
+
+          <p className="font-body text-sm text-dark/60">
+            Need to make a change?{' '}
+            <Link to="/manage-booking" className="font-semibold text-forest underline hover:text-gold">
+              Manage your booking
+            </Link>
+          </p>
 
           <Button to="/" variant="outline" size="md">
             Return to Homepage
